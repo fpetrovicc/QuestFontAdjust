@@ -17,20 +17,24 @@ local function ApplyFont(size)
 end
 
 local f = CreateFrame("Frame", "QFAdjustFrame", UIParent)
-f:SetWidth(150)
-f:SetHeight(70)
+f:SetWidth(160)
+f:SetHeight(85)
 f:SetPoint("CENTER", 0, 150)
 f:SetMovable(true)
 f:EnableMouse(true)
 f:RegisterForDrag("LeftButton")
 f:SetScript("OnDragStart", function() this:StartMoving() end)
 f:SetScript("OnDragStop", function() this:StopMovingOrSizing() end)
-f:Hide() 
+f:Hide()
+
+local title = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+title:SetPoint("TOP", f, "TOP", 0, -12)
+title:SetText("Quest Font")
 
 local eb = CreateFrame("EditBox", "QFAdjustInput", f, "InputBoxTemplate")
-eb:SetWidth(40)
+eb:SetWidth(35)
 eb:SetHeight(20)
-eb:SetPoint("CENTER", f, "CENTER", -30, -5)
+eb:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 25, 20)
 eb:SetAutoFocus(false)
 eb:SetNumeric(true)
 
@@ -47,10 +51,12 @@ b:SetScript("OnClick", function()
     eb:ClearFocus()
 end)
 
+local closeBtn = CreateFrame("Button", nil, f, "UIPanelCloseButton")
+closeBtn:SetPoint("TOPRIGHT", f, "TOPRIGHT", -2, -2)
+
 local ev = CreateFrame("Frame")
 ev:RegisterEvent("VARIABLES_LOADED")
 ev:SetScript("OnEvent", function()
-    
     eb:SetText(QFAdjust_Size)
     ApplyFont(QFAdjust_Size)
     
