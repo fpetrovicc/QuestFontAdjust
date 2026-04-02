@@ -9,10 +9,35 @@ local function ApplyFont(size)
 
     QFAdjust_Size = size
 
-    local fN, _, fF = QuestFont:GetFont()
-    if fN then
-        QuestFont:SetFont(fN, size, fF)
+    local fonts = {
+        QuestFont,
+        QuestFontNormalSmall,
+        GossipGreetingFontNormal
+    }
+    
+    for _, fontObj in ipairs(fonts) do
+        if fontObj then
+            local fN, _, fF = fontObj:GetFont()
+            if fN then
+                fontObj:SetFont(fN, size, fF)
+            end
+        end
     end
+
+    local titleFonts = {
+        QuestTitleFont,
+        GossipGreetingTitleFont
+    }
+    
+    for _, fontObj in ipairs(titleFonts) do
+        if fontObj then
+            local fN, _, fF = fontObj:GetFont()
+            if fN then
+                fontObj:SetFont(fN, size + 4, fF)
+            end
+        end
+    end
+
     return size
 end
 
@@ -56,23 +81,27 @@ closeBtn:SetPoint("TOPRIGHT", f, "TOPRIGHT", -2, -2)
 
 local ev = CreateFrame("Frame")
 ev:RegisterEvent("VARIABLES_LOADED")
+ev:RegisterEvent("GOSSIP_SHOW")
+ev:RegisterEvent("QUEST_DETAIL")
+ev:RegisterEvent("QUEST_PROGRESS")
+ev:RegisterEvent("QUEST_COMPLETE")
+ev:RegisterEvent("QUEST_GREETING")
+
 ev:SetScript("OnEvent", function()
-    eb:SetText(QFAdjust_Size)
-    ApplyFont(QFAdjust_Size)
-    
-    if pfUI and pfUI.api and pfUI.api.CreateBackdrop then
-        pfUI.api.CreateBackdrop(f, nil, true)
-    else
-        f:SetBackdrop({
-            bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
-            edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
-            tile = true, tileSize = 32, edgeSize = 32,
-            insets = { left = 11, right = 12, top = 12, bottom = 11 }
-        })
+    if event == "VARIABLES_LOADED" then
+        eb:SetText(QFAdjust_Size)
+        if pfUI and pfUI.api and pfUI.api.CreateBackdrop then
+            pfUI.api.CreateBackdrop(f, nil, true)
+        else
+            f:SetBackdrop({
+                bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+                edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+                tile = true, tileSize = 32, edgeSize = 32,
+                insets = { left = 11, right = 12, top = 12, bottom = 11 }
+            })
+        end
     end
-    
-    this:UnregisterEvent("VARIABLES_LOADED")
-    this:SetScript("OnEvent", nil)
+    ApplyFont(QFAdjust_Size)
 end)
 
 SLASH_QFADJUST1 = "/qfa"
