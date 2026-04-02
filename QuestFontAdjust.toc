@@ -1,0 +1,6 @@
+## Interface: 11200
+## Title: QuestFontAdjust
+## Notes: A minimalist addon to dynamically adjust quest font size while maintaining UI compatibility.
+## Author: fpetrovicc
+## SavedVariables: QFAdjust_Size
+QuestFontAdjust.lua
